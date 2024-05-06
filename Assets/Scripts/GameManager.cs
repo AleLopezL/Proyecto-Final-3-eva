@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -13,12 +14,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]public  int scoreCount;
 
     [Header("ElectionControll")]
+    [SerializeField] public bool[] _BoolPool;
+
+    [TextArea]
+    [SerializeField] string BoolPoolReferences;
     [SerializeField] public bool _IsElected;
-    [SerializeField] public bool _IsSum;
-    [SerializeField] public bool _IsSubs;
-    [SerializeField] public bool _IsDiv;
-    [SerializeField] public bool _IsMulty;
-    [SerializeField] public bool _IsEcu;
+    [SerializeField] public bool _IsMixed;
 
     private void Awake()
     {
@@ -51,6 +52,7 @@ public class GameManager : MonoBehaviour
     {
         if (!_IsStarted)
         {
+            timeManager = GameObject.FindWithTag("TimeManager");
             _IsStarted = true;
             timeManager.GetComponent<TimeManager>().StartCoroutine("UpdateTotalTimer");
             timeManager.GetComponent<TimeManager>().StartCoroutine("UpdateQuestionTimer");
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour
     }
     public void accertQuestion()
     {
+       
         timeManager.GetComponent<TimeManager>()._IsAnswered = true;
         scoreCount += 10;
         timeManager.GetComponent<TimeManager>().restartQuestion();
@@ -76,28 +79,61 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
     }
 
+    
     public void electQuestion()
     {
-        while (!_IsElected)
+        if (_IsMixed)
         {
-            switch (Random.Range(0, 5))
+            while (!_IsElected)
             {
-                case 0: 
-                    if (_IsSum) DictionaryManager.instance.PlaySums(); _IsElected = true;
-                    break; 
-                case 1:
-                    if (_IsSubs) DictionaryManager.instance.PlaySubsttacts(); _IsElected = true;
-                    break; 
-                case 2:
-                    if (_IsMulty) DictionaryManager.instance.PlayMultiplies(); _IsElected = true;
-                    break;
-                case 3:
-                    if (_IsDiv) DictionaryManager.instance.PlayDivides(); _IsElected = true;
-                    break;
-                case 4:
-                    if (_IsEcu) DictionaryManager.instance.PlayEcuations(); _IsElected = true;
-                    break;
+                switch (Random.Range(0, 5))
+                {
+                    case 0:
+                        if (_BoolPool[0]) DictionaryManager.instance.PlaySums(); _IsElected = true;
+                        break;
+                    case 1:
+                        if (_BoolPool[1]) DictionaryManager.instance.PlaySubsttacts(); _IsElected = true;
+                        break;
+                    case 2:
+                        if (_BoolPool[2]) DictionaryManager.instance.PlayMultiplies(); _IsElected = true;
+                        break;
+                    case 3:
+                        if (_BoolPool[3]) DictionaryManager.instance.PlayDivides(); _IsElected = true;
+                        break;
+                    case 4:
+                        if (_BoolPool[4]) DictionaryManager.instance.PlayEcuations(); _IsElected = true;
+                        break;
+                }
             }
         }
+        else {
+            for (int i = 0; i < _BoolPool.Length; i++)
+            {
+                if(_BoolPool[i] == true)
+                {
+                    DictionaryManager.instance.electSectionSimple(i);
+                    break;
+                };
+
+            }
+            }
+    }
+
+
+    public void boolController(int selected)
+    {
+        for(int i= 0;i<_BoolPool.Length;i++)
+        {
+            if(selected == i)
+            {
+                _BoolPool[i] = true;
+            }
+            else
+            {
+                _BoolPool[i] = false;
+            }
+
+        }
+
     }
 }

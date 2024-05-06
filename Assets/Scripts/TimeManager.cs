@@ -32,7 +32,10 @@ public class TimeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        scoreText.text = GameManager.instance.scoreCount.ToString(); 
+        if (GameManager.instance._IsStarted)
+        {
+            scoreText.text = GameManager.instance.scoreCount.ToString();
+        }   
     }
 
     public void restartQuestion()
@@ -66,6 +69,7 @@ public class TimeManager : MonoBehaviour
 
         _IsAnswered = false;
         Debug.Log("prueba1");
+        GameManager.instance._IsElected = false;
         GameManager.instance.electQuestion();
         // Tiempo de la misión en segundos
         while (LocalQuestionTime > 0)

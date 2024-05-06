@@ -29,6 +29,7 @@ public class DictionaryManager : MonoBehaviour
     [SerializeField] string[] _DivArray;
     [SerializeField] string[] _MulArray;
     [SerializeField] string[] _EcuArray;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -74,6 +75,23 @@ public class DictionaryManager : MonoBehaviour
         }
     }
 
+    public void electSectionSimple(int section)
+    {
+        switch (section)
+        {
+            case 0: PlaySums();
+                break;
+            case 1: PlaySubsttacts();
+                break;
+            case 2:PlayMultiplies();
+                break;
+            case 3: PlayDivides();
+                break;
+            case 4: PlayEcuations();
+                break;
+        }
+        
+    }
     public void PlaySums()
     {
         Debug.Log("prueba2");
@@ -81,6 +99,7 @@ public class DictionaryManager : MonoBehaviour
     }
     public void PlaySubsttacts()
     {
+
         Debug.Log("prueba2");
         CardTextGenerator.instance.WriteOnCall(D_simpleSubstracs[Random.Range(0, D_simpleSubstracs.Count)]);
     }
