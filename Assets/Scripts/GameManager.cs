@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManager : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] public bool _IsElected;
     [SerializeField] public bool _IsMixed;
 
+    [Header("--Variables Serializadas--")]
+    [SerializeField] GameObject[] _panels;
     private void Awake()
     {
         // ----------------------------------------------------------------
@@ -30,6 +33,7 @@ public class GameManager : MonoBehaviour
         // Si hay instancias se destruye la nueva
         if (instance == null) instance = this;
         else { Destroy(gameObject); return; }
+        DontDestroyOnLoad(gameObject);
     }
     // Start is called before the first frame update
     void Start()
@@ -135,5 +139,22 @@ public class GameManager : MonoBehaviour
 
         }
 
+    }
+
+
+    public void PanelActive(int number)
+    {
+
+        PanelsToFalse();
+        _panels[number].SetActive(true);
+
+    }
+
+    public void PanelsToFalse()
+    {
+        foreach (GameObject panel in _panels)
+        {
+            panel.SetActive(false);
+        }
     }
 }
